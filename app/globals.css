@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+
+@theme {
+  --font-sans: 'Space Grotesk', sans-serif;
+  
+  --color-indigo-650: #0b5cdb;
+  --color-indigo-700: #094eb8;
+  --color-indigo-750: #073f94;
+  --color-rose-550: #e11d48;
+  --color-rose-450: #fb7185;
+  --color-slate-150: #eef2f6;
+  --color-slate-250: #cbd5e1;
+  --color-slate-450: #94a3b8;
+
+  --animate-fade-in: fadeIn 0.2s ease-out forwards;
+  --animate-scale-up: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Custom Scrollbar Utilities */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body, button, input, textarea, select, span, div, h1, h2, h3, h4, h5, h6, a {
+  font-family: 'Space Grotesk', sans-serif !important;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #0f172a;
+}
+

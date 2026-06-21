@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Horizon | Premium Event Calendar</title>
+    <meta name="description" content="A premium event calendar application for organizers to manage sessions and for attendees to sync with Google Calendar.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container solo-mode" id="app-container">
+        
+        <!-- Navigation Sidebar (Eventzone Style) -->
+        <aside class="nav-sidebar">
+            <div class="nav-brand">
+                <span class="logo-event">event</span><span class="logo-zone">zone</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" data-view="overview">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="9" x2="15" y2="9"></line>
+                        <line x1="9" y1="13" x2="15" y2="13"></line>
+                        <line x1="9" y1="17" x2="13" y2="17"></line>
+                    </svg>
+                    <span>Overview</span>
+                </button>
+
+                <button class="nav-item" data-view="calendar">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    <span>Calendar</span>
+                </button>
+                
+                <button class="nav-item" data-view="event-details">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                    <span>Event details</span>
+                </button>
+                
+                <div class="nav-group">
+                    <button class="nav-item has-submenu" id="btn-participants">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        <span>Participants</span>
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="nav-submenu" id="participants-submenu">
+                        <button class="nav-subitem" data-view="attendees">
+                            <span>All Attendees</span>
+                            <span class="badge" id="badge-attendees">0</span>
+                        </button>
+                        <button class="nav-subitem" data-view="pending">
+                            <span>Pending</span>
+                            <span class="badge" id="badge-pending">0</span>
+                        </button>
+                        <button class="nav-subitem" data-view="organizations">
+                            <span>Organizations</span>
+                            <span class="badge" id="badge-organizations">0</span>
+                        </button>
+                        <button class="nav-subitem" data-view="sponsors">
+                            <span>Sponsors</span>
+                            <span class="badge" id="badge-sponsors">0</span>
+                        </button>
+                        <button class="nav-subitem" data-view="exhibitors">
+                            <span>Exhibitors</span>
+                            <span class="badge" id="badge-exhibitors">0</span>
+                        </button>
+                        <button class="nav-subitem" data-view="speakers">
+                            <span>Speakers</span>
+                            <span class="badge" id="badge-speakers">0</span>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="nav-item" data-view="floor-plan">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                    </svg>
+                    <span>Floor Plan</span>
+                </button>
+
+                <button class="nav-item" data-view="tickets">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M2 9a3 3 0 0 1 0-6h20a3 3 0 0 1 0 6 3 3 0 0 1 0 6 3 3 0 0 1 0 6H2a3 3 0 0 1 0-6 3 3 0 0 1 0-6z"></path>
+                        <line x1="9" y1="3" x2="9" y2="21"></line>
+                    </svg>
+                    <span>Tickets</span>
+                </button>
+
+                <button class="nav-item" data-view="check-in">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span>Check In</span>
+                </button>
+
+                <button class="nav-item" data-view="my-team">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>My Team</span>
+                </button>
+
+                <button class="nav-item" data-view="analytics">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                    <span>Analytics</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- Sidebar: Organizer Controls (For Session Creation/Editing, only visible in Calendar View) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="logo-icon"></div>
+                <h1>Session<span>Editor</span></h1>
+            </div>
+            
+            <section class="controls">
+                <div class="section-header">
+                    <h2>Add New Session</h2>
+                    <p>Fill in the details to create a new event session.</p>
+                </div>
+                
+                <form id="session-form">
+                    <div class="form-group">
+                        <label for="title">Session Title</label>
+                        <input type="text" id="title" placeholder="e.g. Opening Keynote" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="start-time">Start Time</label>
+                            <input type="time" id="start-time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="end-time">End Time</label>
+                            <input type="time" id="end-time" required>
+                        </div>
+                    </div>
+
+                    <!-- Speakers Section -->
+                    <div class="form-group person-management">
+                        <label>Speakers</label>
+                        <div class="person-input-container">
+                            <div class="input-row">
+                                <div id="speaker-img-preview" class="img-mini-preview"></div>
+                                <input type="text" id="speaker-name" placeholder="Name">
+                                <label class="file-upload-label" for="speaker-img" title="Upload Image">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                    <input type="file" id="speaker-img" accept="image/*" class="hidden-file-input">
+                                </label>
+                                <button type="button" id="add-speaker" class="btn-add-person" title="Add Speaker">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </button>
+                            </div>
+                            <div id="speakers-list" class="people-preview-list"></div>
+                        </div>
+                    </div>
+
+                    <!-- Moderators Section -->
+                    <div class="form-group person-management">
+                        <label>Moderators</label>
+                        <div class="person-input-container">
+                            <div class="input-row">
+                                <div id="moderator-img-preview" class="img-mini-preview"></div>
+                                <input type="text" id="moderator-name" placeholder="Name">
+                                <label class="file-upload-label" for="moderator-img" title="Upload Image">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                    <input type="file" id="moderator-img" accept="image/*" class="hidden-file-input">
+                                </label>
+                                <button type="button" id="add-moderator" class="btn-add-person" title="Add Moderator">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                </button>
+                            </div>
+                            <div id="moderators-list" class="people-preview-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" rows="4" placeholder="Tell us about this session..."></textarea>
+                    </div>
+
+                    <div class="form-actions-main">
+                        <button type="submit" id="submit-btn" class="btn-primary">
+                            <span class="icon">+</span> Create Session
+                        </button>
+                        <button type="button" id="cancel-edit" class="btn-outline hidden">Cancel Edit</button>
+                    </div>
+                </form>
+            </section>
+
+            <footer class="sidebar-footer">
+                <p>&copy; 2026 Eventzone</p>
+            </footer>
+        </aside>
+
+        <!-- Resizer Handle -->
+        <div class="resizer" id="resizer"></div>
+
+        <!-- Main Content Area with Views -->
+        <main class="main-content">
+            
+            <!-- VIEW: Overview (Dashboard) -->
+            <div id="view-overview" class="app-view">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2 id="dash-event-title">Event Dashboard</h2>
+                        <p id="dash-event-meta">📍 Hybrid | 📅 Oct 12 - Oct 18, 2026</p>
+                    </div>
+                </header>
+
+                <!-- Key Metrics Cards Row -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="stat-lbl">Registered Attendees</span>
+                        <div class="stat-val" id="dash-total-attendees">0</div>
+                        <span class="stat-trend positive">↑ Live Registration Active</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-lbl">Live Check-ins</span>
+                        <div class="stat-val" id="dash-checkin-count">0</div>
+                        <div class="progress-bar"><div class="progress-fill" id="dash-checkin-fill" style="width: 0%"></div></div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-lbl">Active Tiers Revenue</span>
+                        <div class="stat-val" id="dash-total-rev">$0</div>
+                        <span class="stat-trend">Standard & VIP split</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-lbl">Scheduled Sessions</span>
+                        <div class="stat-val" id="dash-total-sessions">0</div>
+                        <span class="stat-trend">Distributed across event days</span>
+                    </div>
+                </div>
+
+                <!-- Split Layout: Analytics & Details -->
+                <div class="analytics-row" style="margin-bottom: 30px;">
+                    <!-- Registration Velocity -->
+                    <div class="chart-card">
+                        <h3>Registration Daily Growth</h3>
+                        <div class="svg-chart-container">
+                            <svg viewBox="0 0 500 200" class="svg-chart">
+                                <defs>
+                                    <linearGradient id="dash-chart-grad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#0b5cdb" stop-opacity="0.3"></stop>
+                                        <stop offset="100%" stop-color="#0b5cdb" stop-opacity="0.0"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <polyline fill="url(#dash-chart-grad)" stroke="none" points="0,200 50,150 100,160 150,110 200,90 250,120 300,70 350,50 400,60 450,20 500,10 500,200"></polyline>
+                                <polyline fill="none" stroke="#0b5cdb" stroke-width="3" points="0,200 50,150 100,160 150,110 200,90 250,120 300,70 350,50 400,60 450,20 500,10"></polyline>
+                                <circle cx="50" cy="150" r="4" fill="#0b5cdb"></circle>
+                                <circle cx="150" cy="110" r="4" fill="#0b5cdb"></circle>
+                                <circle cx="250" cy="120" r="4" fill="#0b5cdb"></circle>
+                                <circle cx="350" cy="50" r="4" fill="#0b5cdb"></circle>
+                                <circle cx="450" cy="20" r="4" fill="#0b5cdb"></circle>
+                            </svg>
+                        </div>
+                        <div class="chart-labels">
+                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Sessions -->
+                    <div class="chart-card">
+                        <h3>Upcoming Timeline Sessions</h3>
+                        <div class="upcoming-sessions-list" id="dash-upcoming-list">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lower Layout: Quick Shortcuts -->
+                <div class="view-card" style="background:#f8fafc; border-style:dashed;">
+                    <h3 style="margin-bottom:15px; font-size:1.1rem; font-weight:700;">Event Quick Actions</h3>
+                    <div style="display:flex; flex-wrap:wrap; gap:12px;">
+                        <button class="btn-primary" style="width:auto; padding:10px 20px;" onclick="calendarApp.switchView('calendar')">📅 Edit Calendar</button>
+                        <button class="btn-primary" style="width:auto; padding:10px 20px; background:#10b981;" onclick="calendarApp.switchView('check-in')">🔑 Live Door Check-In</button>
+                        <button class="btn-outline" style="background:white;" onclick="calendarApp.openModal('attendee')">👤 Add New Attendee</button>
+                        <button class="btn-outline" style="background:white;" onclick="calendarApp.switchView('floor-plan')">🎪 Edit Floor Plan</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: Calendar (Session Editor & Timeline Grid) -->
+            <div id="view-calendar" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Event Timeline & Sessions</h2>
+                        <p>Sort, view, edit, and organize scheduled sessions by day.</p>
+                    </div>
+                    <div class="header-actions">
+                        <button id="clear-all" class="btn-outline">Clear All</button>
+                    </div>
+                </header>
+
+                <div id="day-tabs" class="tabs-container">
+                    <!-- Day tabs injected dynamically -->
+                </div>
+
+                <div id="sessions-grid" class="sessions-grid">
+                    <!-- Sessions injected dynamically -->
+                </div>
+            </div>
+
+            <!-- VIEW: Event Details -->
+            <div id="view-event-details" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Event Details</h2>
+                        <p>Configure details, cover image and general settings for your event.</p>
+                    </div>
+                </header>
+                <div class="view-card event-details-container">
+                    <div class="banner-preview-box" id="banner-preview">
+                        <div class="banner-overlay">
+                            <h2 id="display-event-name">Algeria Hydrogen Law Conference 2026</h2>
+                            <p id="display-event-meta">📍 Hybrid | 📅 Oct 12 - Oct 18, 2026</p>
+                        </div>
+                    </div>
+                    <form id="event-details-form" class="details-form">
+                        <div class="form-group">
+                            <label for="event-title">Event Title</label>
+                            <input type="text" id="event-title" value="Algeria Hydrogen Law Conference 2026" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="event-location">Location / Venue</label>
+                                <input type="text" id="event-location" value="Algiers International Conference Center & Online">
+                            </div>
+                            <div class="form-group">
+                                <label for="event-type">Event Type</label>
+                                <select id="event-type">
+                                    <option value="Hybrid" selected>Hybrid</option>
+                                    <option value="In-person">In-Person Only</option>
+                                    <option value="Virtual">Virtual / Online Only</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="event-start-date">Start Date</label>
+                                <input type="date" id="event-start-date" value="2026-10-12">
+                            </div>
+                            <div class="form-group">
+                                <label for="event-end-date">End Date</label>
+                                <input type="date" id="event-end-date" value="2026-10-18">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="event-description">About Event</label>
+                            <textarea id="event-description" rows="4">The premiere global forum covering the legal, regulatory, and financial frameworks for the developing green hydrogen sector in North Africa.</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Event Cover Banner</label>
+                            <div class="banner-uploader">
+                                <input type="file" id="event-banner-file" accept="image/*" class="hidden-file-input">
+                                <label for="event-banner-file" class="banner-upload-btn">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                                    Upload Custom Banner
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary btn-save-details">Save Event Details</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- VIEW: Attendees -->
+            <div id="view-attendees" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>All Attendees</h2>
+                        <p>Manage list of registered participants and ticket tiers.</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary" id="btn-add-attendee">+ Add Attendee</button>
+                    </div>
+                </header>
+                <div class="table-card">
+                    <div class="table-toolbar">
+                        <input type="text" id="attendee-search" class="search-input" placeholder="Search attendees by name or email...">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Attendee</th>
+                                    <th>Email</th>
+                                    <th>Ticket Type</th>
+                                    <th>Status</th>
+                                    <th>Registered Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendees-table-body">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: Pending -->
+            <div id="view-pending" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Pending Approval</h2>
+                        <p>Review registrations awaiting organizer validation.</p>
+                    </div>
+                </header>
+                <div class="table-card">
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Request Note</th>
+                                    <th>Submitted Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pending-table-body">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: Organizations -->
+            <div id="view-organizations" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Partner Organizations</h2>
+                        <p>Partner institutions, corporations and groups connected to the event.</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary" id="btn-add-org">+ Add Organization</button>
+                    </div>
+                </header>
+                <div class="card-grid" id="organizations-grid">
+                    <!-- Dynamic organization cards -->
+                </div>
+            </div>
+
+            <!-- VIEW: Sponsors -->
+            <div id="view-sponsors" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Event Sponsors</h2>
+                        <p>Sponsors categorized by tier. Displayed on public pages.</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary" id="btn-add-sponsor">+ Add Sponsor</button>
+                    </div>
+                </header>
+                <div class="sponsors-container">
+                    <div class="sponsor-tier-section">
+                        <h3 class="tier-title diamond">💎 Diamond Tier</h3>
+                        <div class="sponsor-grid" id="sponsors-diamond"></div>
+                    </div>
+                    <div class="sponsor-tier-section">
+                        <h3 class="tier-title gold">🥇 Gold Tier</h3>
+                        <div class="sponsor-grid" id="sponsors-gold"></div>
+                    </div>
+                    <div class="sponsor-tier-section">
+                        <h3 class="tier-title silver">🥈 Silver Tier</h3>
+                        <div class="sponsor-grid" id="sponsors-silver"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: Exhibitors -->
+            <div id="view-exhibitors" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Event Exhibitors</h2>
+                        <p>Manage booths and exhibitors present at the venue.</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary" id="btn-add-exhibitor">+ Add Exhibitor</button>
+                    </div>
+                </header>
+                <div class="card-grid" id="exhibitors-grid">
+                    <!-- Dynamic exhibitor cards -->
+                </div>
+            </div>
+
+            <!-- VIEW: Speakers -->
+            <div id="view-speakers" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Speakers & Moderators</h2>
+                        <p>List of all experts speaking or moderating sessions. Gathered dynamically from your session timeline.</p>
+                    </div>
+                </header>
+                <div class="speakers-directory" id="speakers-directory-grid">
+                    <!-- Injected dynamically -->
+                </div>
+            </div>
+
+            <!-- VIEW: Floor Plan (New View) -->
+            <div id="view-floor-plan" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Exhibition Floor Plan</h2>
+                        <p>Place, select, and assign booths, stages, and facilities on the interactive venue layout.</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-outline" id="btn-clear-floor">Reset Layout</button>
+                    </div>
+                </header>
+
+                <div class="floor-plan-workspace">
+                    <!-- Toolbox panel -->
+                    <div class="floor-toolbox">
+                        <h3>1. Select Item Type</h3>
+                        <div class="toolbox-grid">
+                            <button class="tool-btn active" data-type="booth-std">
+                                <span class="tool-icon" style="background:#e0f2fe; border-color:#0284c7;">🎪</span>
+                                <span class="tool-name">Std Booth (1x1)</span>
+                            </button>
+                            <button class="tool-btn" data-type="booth-vip">
+                                <span class="tool-icon" style="background:#fef3c7; border-color:#d97706;">⭐</span>
+                                <span class="tool-name">VIP Booth (1x1)</span>
+                            </button>
+                            <button class="tool-btn" data-type="stage">
+                                <span class="tool-icon" style="background:#f3e8ff; border-color:#7c3aed;">🎭</span>
+                                <span class="tool-name">Stage / Forum</span>
+                            </button>
+                            <button class="tool-btn" data-type="food">
+                                <span class="tool-icon" style="background:#d1fae5; border-color:#059669;">🍔</span>
+                                <span class="tool-name">Catering/Food</span>
+                            </button>
+                        </div>
+
+                        <div class="assignment-box" id="floor-assignment-panel" style="margin-top:25px;">
+                            <h3>2. Assign Exhibitor</h3>
+                            <div class="form-group" style="margin-top:10px;">
+                                <label for="booth-exhibitor-select">Exhibitor Company</label>
+                                <select id="booth-exhibitor-select" style="width:100%; padding:10px;">
+                                    <option value="">-- No Assignment / Vacant --</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="booth-label-input">Custom Label</label>
+                                <input type="text" id="booth-label-input" placeholder="e.g. Booth 101">
+                            </div>
+                            <p style="font-size:0.8rem; color:var(--text-muted);">Click on any grid cell to place the selected item, or click a placed item to edit/delete it.</p>
+                        </div>
+
+                        <div id="selected-booth-info" class="selected-booth-info-box hidden" style="margin-top:20px;">
+                            <h4>Selected Item</h4>
+                            <div class="info-details" id="selected-booth-details"></div>
+                            <button class="btn-primary" id="btn-delete-booth" style="background:var(--accent); width:100%; padding:10px; margin-top:10px;">Delete Item</button>
+                        </div>
+                    </div>
+
+                    <!-- Visual Grid Canvas -->
+                    <div class="floor-grid-container">
+                        <div class="grid-ruler-top">
+                            <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
+                        </div>
+                        <div class="grid-middle-row">
+                            <div class="grid-ruler-left">
+                                <span>A</span><span>B</span><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>H</span><span>I</span><span>J</span><span>K</span><span>L</span>
+                            </div>
+                            <div class="floor-grid" id="interactive-floor-grid">
+                                <!-- 144 grid items generated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: Tickets -->
+            <div id="view-tickets" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Tickets & Pricing</h2>
+                        <p>Manage ticket tiers, prices, availability, and sales performance.</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary" id="btn-add-ticket">+ Add Ticket Tier</button>
+                    </div>
+                </header>
+                
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="stat-lbl">Tickets Sold</span>
+                        <div class="stat-val" id="ticket-sold-val">120 / 300</div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 40%"></div></div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-lbl">Total Ticket Revenue</span>
+                        <div class="stat-val" id="ticket-rev-val">$24,500</div>
+                        <span class="stat-trend positive">↑ 15% this week</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-lbl">Active Tiers</span>
+                        <div class="stat-val" id="active-tiers-count">3</div>
+                        <span class="stat-trend">Standard, VIP, Online</span>
+                    </div>
+                </div>
+
+                <div class="card-grid" id="tickets-grid-container">
+                    <!-- Tickets generated dynamically -->
+                </div>
+            </div>
+
+            <!-- VIEW: Check In -->
+            <div id="view-check-in" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Check In Dashboard</h2>
+                        <p>Track live attendee check-ins at the door.</p>
+                    </div>
+                </header>
+                
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <span class="stat-lbl">Overall Attendance</span>
+                        <div class="stat-val" id="checkin-ratio">45 / 120</div>
+                        <div class="progress-bar"><div class="progress-fill" id="checkin-progress" style="width: 37.5%"></div></div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-lbl">Check-In Speed</span>
+                        <div class="stat-val">12 / min</div>
+                        <span class="stat-trend positive">Peak hour check-in active</span>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-toolbar">
+                        <input type="text" id="checkin-search" class="search-input" placeholder="Search attendees by name to check them in...">
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Attendee</th>
+                                    <th>Ticket Type</th>
+                                    <th>Check-in Status</th>
+                                    <th>Check-in Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="checkin-table-body">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: My Team -->
+            <div id="view-my-team" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>My Event Team</h2>
+                        <p>Invite and manage collaboration permissions for event staff.</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn-primary" id="btn-add-team-member">+ Add Member</button>
+                    </div>
+                </header>
+                <div class="table-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="team-table-body">
+                            <!-- Loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- VIEW: Analytics -->
+            <div id="view-analytics" class="app-view hidden">
+                <header class="main-header">
+                    <div class="header-info">
+                        <h2>Event Analytics</h2>
+                        <p>Monitor registrations velocity, ticket splits, and attendance engagement charts.</p>
+                    </div>
+                </header>
+                
+                <div class="analytics-row">
+                    <div class="chart-card">
+                        <h3>Daily Registration Velocity</h3>
+                        <div class="svg-chart-container">
+                            <svg viewBox="0 0 500 200" class="svg-chart">
+                                <defs>
+                                    <linearGradient id="chart-grad" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#4f46e5" stop-opacity="0.3"></stop>
+                                        <stop offset="100%" stop-color="#4f46e5" stop-opacity="0.0"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <polyline fill="url(#chart-grad)" stroke="none" points="0,200 50,150 100,160 150,110 200,90 250,120 300,70 350,50 400,60 450,20 500,10 500,200"></polyline>
+                                <polyline fill="none" stroke="#4f46e5" stroke-width="3" points="0,200 50,150 100,160 150,110 200,90 250,120 300,70 350,50 400,60 450,20 500,10"></polyline>
+                                <circle cx="50" cy="150" r="4" fill="#4f46e5"></circle>
+                                <circle cx="150" cy="110" r="4" fill="#4f46e5"></circle>
+                                <circle cx="250" cy="120" r="4" fill="#4f46e5"></circle>
+                                <circle cx="350" cy="50" r="4" fill="#4f46e5"></circle>
+                                <circle cx="450" cy="20" r="4" fill="#4f46e5"></circle>
+                            </svg>
+                        </div>
+                        <div class="chart-labels">
+                            <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                        </div>
+                    </div>
+
+                    <div class="chart-card">
+                        <h3>Registration Breakdown by Ticket Type</h3>
+                        <div class="donut-chart-container">
+                            <div class="bar-chart-custom">
+                                <div class="bar-group">
+                                    <span class="bar-label">Standard Admission (45%)</span>
+                                    <div class="bar-outer"><div class="bar-inner" style="width: 45%; background: var(--primary)"></div></div>
+                                </div>
+                                <div class="bar-group">
+                                    <span class="bar-label">VIP Access (35%)</span>
+                                    <div class="bar-outer"><div class="bar-inner" style="width: 35%; background: var(--accent)"></div></div>
+                                </div>
+                                <div class="bar-group">
+                                    <span class="bar-label">Online Only (20%)</span>
+                                    <div class="bar-outer"><div class="bar-inner" style="width: 20%; background: #10b981"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-row" style="margin-top: 30px;">
+                    <div class="stat-card">
+                        <span class="stat-lbl">Conversion Rate</span>
+                        <div class="stat-val">3.4%</div>
+                        <span class="stat-trend positive">↑ 0.5% this week</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-lbl">Average Ticket Price</span>
+                        <div class="stat-val">$204</div>
+                        <span class="stat-trend">Based on standard & VIP split</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-lbl">Check-in Rate</span>
+                        <div class="stat-val">37.5%</div>
+                        <span class="stat-trend negative">↓ 2% compared to last event</span>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Modals for adding items -->
+    <div id="add-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-title">Add New Entry</h3>
+                <button class="btn-close-modal" id="btn-close-modal">×</button>
+            </div>
+            <form id="modal-form" class="modal-form">
+                <!-- Injected dynamically depending on form type -->
+                <div id="modal-form-content"></div>
+                <button type="submit" class="btn-primary" style="width:100%; margin-top: 20px;">Save Entry</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
